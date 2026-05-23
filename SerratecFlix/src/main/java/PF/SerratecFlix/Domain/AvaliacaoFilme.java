@@ -14,7 +14,7 @@ import java.util.UUID;
 public class AvaliacaoFilme {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @NotNull
