@@ -2,11 +2,19 @@ package PF.SerratecFlix.Domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "series")
 public class Serie {
 
@@ -47,101 +55,4 @@ public class Serie {
     @ManyToMany(mappedBy = "series")
     private List<ListaFavoritos> listasFavoritos = new ArrayList<>();
 
-    public Serie() {
-    }
-
-    public Serie(UUID id, String titulo, String descricao, Integer temporadas, Integer episodios,
-                 LocalDate dataLancamento, Double notaMedia, List<AvaliacaoSerie> avaliacoes,
-                 Set<Categoria> categorias, List<ListaFavoritos> listasFavoritos) {
-        this.id = id;
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.temporadas = temporadas;
-        this.episodios = episodios;
-        this.dataLancamento = dataLancamento;
-        this.notaMedia = notaMedia;
-        this.avaliacoes = avaliacoes;
-        this.categorias = categorias;
-        this.listasFavoritos = listasFavoritos;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public Integer getTemporadas() {
-        return temporadas;
-    }
-
-    public void setTemporadas(Integer temporadas) {
-        this.temporadas = temporadas;
-    }
-
-    public Integer getEpisodios() {
-        return episodios;
-    }
-
-    public void setEpisodios(Integer episodios) {
-        this.episodios = episodios;
-    }
-
-    public LocalDate getDataLancamento() {
-        return dataLancamento;
-    }
-
-    public void setDataLancamento(LocalDate dataLancamento) {
-        this.dataLancamento = dataLancamento;
-    }
-
-    public Double getNotaMedia() {
-        return notaMedia;
-    }
-
-    public void setNotaMedia(Double notaMedia) {
-        this.notaMedia = notaMedia;
-    }
-
-    public List<AvaliacaoSerie> getAvaliacoes() {
-        return avaliacoes;
-    }
-
-    public void setAvaliacoes(List<AvaliacaoSerie> avaliacoes) {
-        this.avaliacoes = avaliacoes;
-    }
-
-    public Set<Categoria> getCategorias() {
-        return categorias;
-    }
-
-    public void setCategorias(Set<Categoria> categorias) {
-        this.categorias = categorias;
-    }
-
-    public List<ListaFavoritos> getListasFavoritos() {
-        return listasFavoritos;
-    }
-
-    public void setListasFavoritos(List<ListaFavoritos> listasFavoritos) {
-        this.listasFavoritos = listasFavoritos;
-    }
 }
