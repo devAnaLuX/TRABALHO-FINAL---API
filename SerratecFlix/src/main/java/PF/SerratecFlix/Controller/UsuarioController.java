@@ -38,7 +38,7 @@ public class UsuarioController {
     @GetMapping
     public ResponseEntity<List<UsuarioDTOResponse>> listarUsuarios() {
         // Lógica para listar todos os usuários
-        List<UsuarioDTOResponse> usuarios = new List.of();
+        List<UsuarioDTOResponse> usuarios = List.of();
         // Adicionar usuários à lista
         return ResponseEntity.ok(usuarios);
     }
