@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import PF.SerratecFlix.DTO.Request.AvaliacaoSerieDTORequest;
-import PF.SerratecFlix.DTO.Request.SerieDTORequest;
 import PF.SerratecFlix.DTO.Response.AvaliacaoSerieDTOResponse;
 import PF.SerratecFlix.Service.AvaliacaoSerieService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,7 +44,7 @@ public class AvaliacaoSerieController {
 	
 	@PostMapping
     @Operation(summary = "Cadastrar série")
-    public ResponseEntity<AvaliacaoSerieDTOResponse> criar(@Valid @RequestBody SerieDTORequest dto) {
+    public ResponseEntity<AvaliacaoSerieDTOResponse> criar(@Valid @RequestBody AvaliacaoSerieDTORequest dto) {
 		AvaliacaoSerieDTOResponse response = avaliacaoserieService.criar(dto);
     	
     	URI uri = ServletUriComponentsBuilder
