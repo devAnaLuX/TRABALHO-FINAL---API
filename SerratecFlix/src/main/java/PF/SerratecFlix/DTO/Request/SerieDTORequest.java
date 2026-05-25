@@ -17,7 +17,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Dados para cadastro ou atualização de séries")
 public class SerieDTORequest {
 	
 	@NotBlank
