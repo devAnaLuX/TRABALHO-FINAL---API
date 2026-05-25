@@ -1,6 +1,7 @@
 package PF.SerratecFlix.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ public class SerieService {
     public List<Object> listarTodos(){
         return serieRepository.findAll()
                 .stream()
-                .map(this::toDTOResponse)
+                .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
  
@@ -64,6 +65,10 @@ public class SerieService {
     }
  
     private SerieDTOResponse toResponseDTO(Serie s) {
+    	Set<CategoriaResponseDTO> categorias = s.getCategorias().stream()
+                .map(c -> new CategoriaResponseDTO(c.getId(), c.getNome()))
+                .collect(Collectors.toSet());
+    	
         return new SerieDTOResponse(
                 s.getId(),
                 s.getTitulo(),
@@ -72,9 +77,7 @@ public class SerieService {
                 s.getEpisodios(),
                 s.getDataLancamento(),
                 s.getNotaMedia(),
-                s.getCategorias().stream()
-                        .map(c -> new CategoriaResponseDTO(c.getId(), c.getNome()))
-                        .collect(Collectors.toSet())
+                categorias
         );
     }
     
