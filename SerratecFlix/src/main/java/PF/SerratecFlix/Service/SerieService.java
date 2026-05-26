@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import PF.SerratecFlix.DTO.Request.SerieDTORequest;
 import PF.SerratecFlix.DTO.Response.SerieDTOResponse;
 import PF.SerratecFlix.Domain.Serie;
-import PF.SerratecFlix.Exception.RecursoNaoEncontradoException;
+import PF.SerratecFlix.Exception.ResourceNotFoundException;
 import PF.SerratecFlix.Repository.SerieRepository;
 
 @Service
@@ -39,13 +39,13 @@ public class SerieService {
 
     public SerieDTOResponse buscarPorId(UUID id) {
         Serie serie = serieRepository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Série", id));
+        		.orElseThrow(() -> new ResourceNotFoundException("Série não encontrada com id: " + id));
         return new SerieDTOResponse(serie);
     }
 
     public SerieDTOResponse atualizar(UUID id, SerieDTORequest dto) {
         Serie serie = serieRepository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Série", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Série não encontrada com id: " + id));
 
         serie.setTitulo(dto.getTitulo());
         serie.setDescricao(dto.getDescricao());
@@ -58,7 +58,7 @@ public class SerieService {
 
     public void deletar(UUID id) {
         if (!serieRepository.existsById(id)) {
-            throw new RecursoNaoEncontradoException("Série", id);
+            throw new ResourceNotFoundException("Série não encontrada com id: " + id);
         }
         serieRepository.deleteById(id);
     }

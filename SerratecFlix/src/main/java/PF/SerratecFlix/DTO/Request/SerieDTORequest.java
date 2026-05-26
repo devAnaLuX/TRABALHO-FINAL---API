@@ -42,7 +42,7 @@ public class SerieDTORequest {
     @Schema(description = "Data de lançamento", example = "2026-06-01")
     private LocalDate dataLancamento;
 
-    @Positive(message = "Preço deve ser positivo")
+    @Positive(message = "Nota deve ser positivo")
     @Schema(description = "Nota para a série de 0 a 10", example = "9")
     private Double notaMedia;
     
