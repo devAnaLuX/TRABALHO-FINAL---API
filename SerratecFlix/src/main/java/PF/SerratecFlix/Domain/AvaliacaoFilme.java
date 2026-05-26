@@ -1,14 +1,31 @@
 package PF.SerratecFlix.Domain;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "avaliacoes_filme")
 public class AvaliacaoFilme {
@@ -39,64 +56,4 @@ public class AvaliacaoFilme {
     private Filme filme;
 
 
-    public AvaliacaoFilme() {
-    }
-
-    public AvaliacaoFilme(UUID id, Double nota, String comentario, LocalDateTime dataAvaliacao,
-                          Usuario usuario, Filme filme) {
-        this.id = id;
-        this.nota = nota;
-        this.comentario = comentario;
-        this.dataAvaliacao = dataAvaliacao;
-        this.usuario = usuario;
-        this.filme = filme;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Double getNota() {
-        return nota;
-    }
-
-    public void setNota(Double nota) {
-        this.nota = nota;
-    }
-
-    public String getComentario() {
-        return comentario;
-    }
-
-    public void setComentario(String comentario) {
-        this.comentario = comentario;
-    }
-
-    public LocalDateTime getDataAvaliacao() {
-        return dataAvaliacao;
-    }
-
-    public void setDataAvaliacao(LocalDateTime dataAvaliacao) {
-        this.dataAvaliacao = dataAvaliacao;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Filme getFilme() {
-        return filme;
-    }
-
-    public void setFilme(Filme filme) {
-        this.filme = filme;
-    }
 }

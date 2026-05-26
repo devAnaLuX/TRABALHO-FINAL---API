@@ -1,12 +1,26 @@
 package PF.SerratecFlix.Domain;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter 
+@Setter 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "categorias")
 public class Categoria {
@@ -16,10 +30,10 @@ public class Categoria {
     private UUID id;
 
     @NotBlank
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 50)
     private String nome;
 
-    @Column(nullable = false)
+    @Column(nullable = true, length = 250)
     private String descricao;
 
     @ManyToMany(mappedBy = "categorias")
@@ -28,54 +42,4 @@ public class Categoria {
     @ManyToMany(mappedBy = "categorias")
     private Set<Serie> series = new HashSet<>();
 
-    public Categoria() {
-    }
-
-    public Categoria(UUID id, String nome, String descricao, Set<Filme> filmes, Set<Serie> series) {
-        this.id = id;
-        this.nome = nome;
-        this.descricao = descricao;
-        this.filmes = filmes;
-        this.series = series;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public Set<Filme> getFilmes() {
-        return filmes;
-    }
-
-    public void setFilmes(Set<Filme> filmes) {
-        this.filmes = filmes;
-    }
-
-    public Set<Serie> getSeries() {
-        return series;
-    }
-
-    public void setSeries(Set<Serie> series) {
-        this.series = series;
-    }
 }
