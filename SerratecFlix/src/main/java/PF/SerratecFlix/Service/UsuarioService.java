@@ -23,27 +23,21 @@ public class UsuarioService {
     
     //retorna todos os usuários
     public List<UsuarioDTOResponse> findAll() {
-       return usuaruoRepository.findAll()
+       return usuarioRepository.findAll()
        .stream()
        .map(this::toDTOResponse)
        .collect(Collectors.toList());
     }
 
     //adição de um novo usuario
-    @Param
-    @returns
     public UsuarioDTOResponse save(UsuarioDTORequest usuarioDTORequest) {
-        usuario usuario = toEntity(usuarioDTORequest);
+        Usuario usuario = toEntity(usuarioDTORequest);
         usuario = usuarioRepository.save(usuario);
         return toDTOResponse(usuario);
     }
 
     //atualização de um usuario existente
-    @Param id
-    @Param usuarioDTORequest
-    @Return
-
-    public UsuarioDTOResponse update(Long id, UsuarioDTORequest usuarioDTORequest) {
+       public UsuarioDTOResponse update(Long id, UsuarioDTORequest usuarioDTORequest) {
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado" + id));
         usuario.setNome(usuarioDTORequest.getNome());
         usuario.setEmail(usuarioDTORequest.getEmail());
@@ -55,9 +49,6 @@ public class UsuarioService {
     }
 
     //exclusão de um usuario existente
-    @Param id
-    @Throws ResourceNotFoundException
-
     public void deleteById(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
             .orElseThrow(() -> new UsuarioService().ResourceNotFoundException("Usuário não encontrado com id: " + id));
