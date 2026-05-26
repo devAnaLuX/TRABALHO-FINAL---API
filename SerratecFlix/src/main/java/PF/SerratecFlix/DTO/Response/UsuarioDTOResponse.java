@@ -1,8 +1,18 @@
 package PF.SerratecFlix.DTO.Response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+ 
 import java.time.LocalDateTime;
 import java.util.UUID;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonPropertyOrder({"id", "nome", "email", "username", "fotoPerfilUrl", "dataCriacao"}) 
 public class UsuarioDTOResponse {
     
     @Schema(description = "ID do usuário")
@@ -27,6 +37,7 @@ public class UsuarioDTOResponse {
     }
 
     @Schema(description = "Construtor para criar um objeto UsuarioDTOResponse")
+    
     public UsuarioDTOResponse(UUID id, String nome, String email, String username, String fotoPerfilUrl, LocalDateTime dataCriacao) {
         this.id = id;
         this.nome = nome;
