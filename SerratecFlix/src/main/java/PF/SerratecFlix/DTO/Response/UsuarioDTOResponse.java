@@ -10,13 +10,15 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Data
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@JsonPropertyOrder({"id", "nome", "email", "username", "fotoPerfilUrl", "dataCriacao"}) 
+@JsonPropertyOrder({"id", "nome", "email", "username", "fotoPerfilUrl", "dataCriacao"})
 public class UsuarioDTOResponse {
     
     @Schema(description = "ID do usuário")
@@ -37,9 +39,6 @@ public class UsuarioDTOResponse {
     @Schema(description = "Data de criação da conta")
     private LocalDateTime dataCriacao;
 
-    public UsuarioDTOResponse() {
-    }
 
-    @Schema(description = "Construtor para criar um objeto UsuarioDTOResponse")
 
 }

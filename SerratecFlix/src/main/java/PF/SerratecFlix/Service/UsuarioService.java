@@ -5,11 +5,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
  
 import PF.SerratecFlix.DTO.Request.UsuarioDTORequest;
 import PF.SerratecFlix.DTO.Response.UsuarioDTOResponse;
 import PF.SerratecFlix.Domain.Usuario;
+import PF.SerratecFlix.Exception.ResourceNotFoundException;
 import PF.SerratecFlix.Repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,9 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+
+
     // Métodos para criar, atualizar, excluir e buscar usuários
     
     //retorna todos os usuários
@@ -32,26 +37,45 @@ public class UsuarioService {
     //adição de um novo usuario
     public UsuarioDTOResponse save(UsuarioDTORequest usuarioDTORequest) {
         Usuario usuario = toEntity(usuarioDTORequest);
+
+         // Criptografa senha
+        encryptPassword(usuario, usuarioDTORequest);
+
         usuario = usuarioRepository.save(usuario);
+
         return toDTOResponse(usuario);
     }
 
+
     //atualização de um usuario existente
-       public UsuarioDTOResponse update(Long id, UsuarioDTORequest usuarioDTORequest) {
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado" + id));
+       public UsuarioDTOResponse update(UUID id, UsuarioDTORequest usuarioDTORequest) {
+        Usuario usuario = usuarioRepository.findById(id)
+        .orElseThrow(() -> 
+        new ResourceNotFoundException("Usuário não encontrado" + id));
         usuario.setNome(usuarioDTORequest.getNome());
         usuario.setEmail(usuarioDTORequest.getEmail());
         usuario.setUsername(usuarioDTORequest.getUsername());
         usuario.setSenha(usuarioDTORequest.getSenha());
 
-        usuario = usuarioRepository.save(usuario);
-        return toDTOResponse(usuario);
+
+    //Atualização da senha criptografada
+        encryptPassword(usuario, usuarioDTORequest);
+
+            usuario = usuarioRepository.save(usuario);
+
+         return toDTOResponse(usuario);
+    }
+
+     // Método para criptografar a senha do usuário
+    private void encryptPassword(Usuario usuario, UsuarioDTORequest dto) {
+        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+    
     }
 
     //exclusão de um usuario existente
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         Usuario usuario = usuarioRepository.findById(id)
-            .orElseThrow(() -> new UsuarioService().ResourceNotFoundException("Usuário não encontrado com id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
         usuarioRepository.delete(usuario);
     }
 
@@ -62,7 +86,7 @@ public class UsuarioService {
                 .nome(usuario.getNome())
                 .email(usuario.getEmail())
                 .username(usuario.getUsername())
-                .fotoPerfilUrl(usuario.getFotoPerfilUrl())
+                // fotoPerfilUrl não disponível no modelo Usuario; omitido
                 .dataCriacao(usuario.getDataCriacao())
                 .build();
     }
@@ -77,6 +101,7 @@ public class UsuarioService {
                 .build();
     }
 
+    
 }
 
     
