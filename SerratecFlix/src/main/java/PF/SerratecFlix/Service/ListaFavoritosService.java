@@ -35,6 +35,9 @@ public class ListaFavoritosService {
     @Autowired
     private SerieRepository serieRepository;
 
+    @Autowired
+    private GeminiService geminiService;
+
     public List<ListaFavoritosDTOResponse> buscar(){
         return listaFavoritosRepository.findAll()
                 .stream()
@@ -112,4 +115,26 @@ public class ListaFavoritosService {
         listaFavoritosRepository.deleteById(id);
     }
 
+
+    public String recomendar(UUID id){
+        ListaFavoritos listaFavoritos = listaFavoritosRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Lista não encontrada."));
+
+        List<String> filmes = listaFavoritos.getFilmes().stream()
+                .map(Filme::getTitulo).toList();
+
+        List<String> series = listaFavoritos.getSeries().stream()
+                .map(Serie::getTitulo).toList();
+
+        String prompt = String.format("""
+            Sou um usuário de uma plataforma de streaming.
+            Minha lista de filmes favoritos: %s
+            Minha lista de séries favoritas: %s
+            Com base nisso, me recomende 3 filmes e 3 séries similares que eu possa gostar.
+            Seja objetivo e explique brevemente o motivo de cada recomendação.
+            """, filmes, series);
+
+        return geminiService.obterRecomendacoes(prompt);
+
+    }
 }

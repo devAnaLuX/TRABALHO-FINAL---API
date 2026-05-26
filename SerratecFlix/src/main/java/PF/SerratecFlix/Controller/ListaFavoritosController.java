@@ -55,4 +55,9 @@ public class ListaFavoritosController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}/recomendacoes")
+    public ResponseEntity<String> recomendar(@PathVariable UUID id){
+        return ResponseEntity.ok(listaFavoritosService.recomendar(id));
+    }
 }
