@@ -66,19 +66,44 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Adicionar foto de perfil")
+     @Operation(summary = "Adicionar ou atualizar foto de perfil")
     @PostMapping("/{id}/foto-perfil")
-    public ResponseEntity<Void> adicionarFotoPerfil(@PathVariable UUID id, @RequestParam("foto") MultipartFile foto) {
-        // Lógica para adicionar ou atualizar a foto de perfil do usuário
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UsuarioDTOResponse> adicionarFotoPerfil(
+        @PathVariable UUID id,
+        @RequestParam("foto") MultipartFile ) {
+
+        UsuarioDTOResponse usuario =
+                usuarioService.adicionarFotoPerfil(id, foto);
+
+        return ResponseEntity.ok(usuario);
     }
 
+
     @Operation(summary = "Remover foto de perfil")
-    @DeleteMapping("/{id}/foto-perfil")
-    public ResponseEntity<Void> removerFotoPerfil(@PathVariable UUID id) {
-        // Lógica para remover a foto de perfil do usuário
-        return ResponseEntity.noContent().build();
+        @DeleteMapping("/{id}/foto-perfil")
+        public ResponseEntity<Void> removerFotoPerfil(
+                @PathVariable UUID id) {
+
+            usuarioService.removerFotoPerfil(id);
+
+            return ResponseEntity.noContent().build();
     }
+
+     @Operation(summary = "Adicionar ou atualizar foto de perfil")
+        @PostMapping("/{id}/foto-perfil")
+        public ResponseEntity<UsuarioDTOResponse> adicionarFotoPerfil(
+            @PathVariable UUID id,
+            @RequestParam("foto") MultipartFile foto) {
+            return ResponseEntity.ok(usuarioService.adicionarFotoPerfil(id, foto));
+        }
+    
+        @Operation(summary = "Remover foto de perfil")
+        @DeleteMapping("/{id}/foto-perfil")
+        public ResponseEntity<Void> removerFotoPerfil(@PathVariable UUID id) {
+            usuarioService.removerFotoPerfil(id);
+            return ResponseEntity.noContent().build();
+    }
+
 
     @Operation(summary = "Criar lista de favoritos")
     @PostMapping("/{id}/listas-favoritos")
