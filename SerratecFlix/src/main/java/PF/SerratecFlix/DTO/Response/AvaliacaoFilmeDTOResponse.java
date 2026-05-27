@@ -6,7 +6,6 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import PF.SerratecFlix.Domain.AvaliacaoFilme;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
