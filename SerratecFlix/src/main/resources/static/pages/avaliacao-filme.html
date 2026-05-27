@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SerratecFlix — Avaliação Filme</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Serratec<span>Flix</span></div>
+        <nav class="navbar">
+            <button class="menu-toggle" aria-label="Abrir menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../pages/serie.html">Série</a></li>
+                <li><a href="../pages/filme.html">Filme</a></li>
+                <li><a href="../pages/categoria.html">Categoria</a></li>
+                <li><a href="../pages/avaliacao.html">Avaliação</a></li>
+                <li><a href="../pages/favoritos.html">Lista</a></li>
+                <li><a href="../pages/usuario.html">Usuário</a></li>
+                <li><a href="../pages/sobre.html">Sobre</a></li>
+                <li><a href="../pages/login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <nav class="nav-api">
+            <button class="nav-api-btn active">🌟 Avaliações de Filmes</button>
+            <button class="nav-api-btn">🔍 ID</button>
+            <button class="nav-api-btn">＋ Cadastrar</button>
+            <button class="nav-api-btn">🔄 Atualizar</button>
+            <button class="nav-api-btn">&minus; Deletar</button>
+        </nav>
+        <div id="listar" class="section active">
+            <h2>Avaliações de Filmes</h2>
+            <div id="grid" class="grid">
+                <div class="loading">Carregando avaliações de filmes...</div>
+            </div>
+        </div>
+        <div id="buscar-id" class="section">
+            <h2>Buscar Avaliações de Filmes por ID</h2>
+            <div class="search-bar">
+                <input type="text" id="input-id" placeholder="Digite o ID do filme..." onkeydown="if(event.key==='Enter') buscarPorId()"/>
+                <button class="btn btn-primary" onclick="buscarPorId()">Buscar</button>
+            </div>
+            <div id="id-result" class="id-result"></div>
+        </div>
+        <div id="cadastrar" class="section">
+            <h2>Cadastrar Avaliações de Filmes</h2>
+            <div class="form-container">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nota Média (0–10) *</label>
+                        <input type="number" id="c-nota" placeholder="Ex: 8.5" min="0.01" max="10" step="0.1"/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Comentário</label>
+                        <textarea id="c-comentario" placeholder="Digite seu comentário"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Data da Avaliação</label>
+                        <input type="date" id="c-data"/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Usuário</label>
+                        <input type="text" id="c-usuario" placeholder="Digite seu usuário"></input>
+                    </div>
+                    <div class="form-group full">
+                        <label>Filme</label>
+                        <input type="text" id="c-filme" placeholder="Selecione o ID do filme"></input>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="cadastrar()">Cadastrar</button>
+                    <button class="btn btn-secondary" onclick="limparForm()">Limpar</button>
+                </div>
+            </div>
+        </div>
+        <div id="atualizar" class="section">
+            <h2>Atualizar Avaliações de Filmes</h2>
+            <div class="form-container">
+                <div class="form-group full">
+                    <label>ID da Avaliação *</label>
+                    <input type="text" id="e-id" placeholder="Digite o ID da avaliação que deseja atualizar"/>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nota Média (0–10)</label>
+                        <input type="number" id="e-nota" placeholder="Ex: 8.5" min="0.01" max="10" step="0.1"/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Comentário</label>
+                        <textarea id="e-comentario" placeholder="Digite seu comentário"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Data da Avaliação</label>
+                        <input type="date" id="e-data"/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Usuário</label>
+                        <input type="text" id="e-usuario" placeholder="Digite seu usuário"></input>
+                    </div>
+                    <div class="form-group full">
+                        <label>Filme</label>
+                        <input type="text" id="e-filme" placeholder="Selecione o ID do filme"></input>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="atualizar()">Atualizar</button>
+                    <button class="btn btn-secondary" onclick="CancelarForm()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <div id="deletar" class="section">
+            <h2>Deletar Avaliações de Filmes</h2>
+            <div class="search-bar">
+                <input type="text" id="d-input-id" placeholder="Digite o ID da avaliação que deseja deletar" onkeydown="if(event.key==='Enter') deletarPorInput()"/>
+                <button class="btn btn-danger" onclick="deletarPorInput()">Deletar</button>
+            </div>
+        </div>
+        <div id="toast"></div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 SerratecFlix. Todos os direitos reservados.</p>
+            <ul class="footer-links">
+                <li><a href="../pages/termos.html">Termos e condições de uso</a></li>
+                <li><a href="../pages/privacidade.html">Política de privacidade</a></li>
+                <li><a href="../pages/sobre.html">Sobre</a></li>
+            </ul>
+        </div>
+    </footer>
+    <script src="../js/script.js"></script>
+    <script src="../js/avaliacao-filme.js"></script>
+</body>
+</html>

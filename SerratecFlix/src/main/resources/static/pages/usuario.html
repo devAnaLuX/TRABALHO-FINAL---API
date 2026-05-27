@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SerratecFlix — Usuário</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Serratec<span>Flix</span></div>
+        <nav class="navbar">
+            <button class="menu-toggle" aria-label="Abrir menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../pages/serie.html">Série</a></li>
+                <li><a href="../pages/filme.html">Filme</a></li>
+                <li><a href="../pages/categoria.html">Categoria</a></li>
+                <li><a href="../pages/avaliacao.html">Avaliação</a></li>
+                <li><a href="../pages/favoritos.html">Favoritos</a></li>
+                <li><a href="../pages/usuario.html">Usuário</a></li>
+                <li><a href="../pages/sobre.html">Sobre</a></li>
+                <li><a href="../pages/login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <nav class="nav-api">
+            <button class="nav-api-btn active">👤 Usuário</button>
+            <button class="nav-api-btn">🔍 ID</button>
+            <button class="nav-api-btn">＋ Cadastrar</button>
+            <button class="nav-api-btn">🔄 Atualizar</button>
+            <button class="nav-api-btn">&minus; Deletar</button>
+            <button class="nav-api-btn">＋ Adicionar Foto de Perfil</button>
+            <button class="nav-api-btn">&minus; Remover Foto de Perfil</button>
+        </nav>
+        <div id="listar" class="section active">
+            <h2>Usuários</h2>
+            <div id="grid" class="grid">
+                <div class="loading">Carregando usuários...</div>
+            </div>
+        </div>
+        <div id="buscar-id" class="section">
+            <h2>Buscar Usuário por ID</h2>
+            <div class="search-bar">
+                <input type="text" id="input-id" placeholder="Digite o ID do usuário..." onkeydown="if(event.key==='Enter') buscarPorId()"/>
+                <button class="btn btn-primary" onclick="buscarPorId()">Buscar</button>
+            </div>
+            <div id="id-result" class="id-result"></div>
+        </div>
+        <div id="cadastrar" class="section">
+            <h2>Cadastrar Usuário</h2>
+            <div class="form-container">
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label>Nome *</label>
+                        <input type="text" id="c-nome" placeholder="Digite o nome do usuário..."/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Email *</label>
+                        <input type="text" id="c-email" placeholder="Digite o email do usuário..."/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Username *</label>
+                        <input type="text" id="c-username" placeholder="Digite o username do usuário..."/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Senha *</label>
+                        <textarea id="c-senha" placeholder="Digite a senha... (min. 8 caracteres)" minlength="8"></textarea>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="cadastrar()">Cadastrar</button>
+                    <button class="btn btn-secondary" onclick="limparForm()">Limpar</button>
+                </div>
+            </div>
+        </div>
+        <div id="atualizar" class="section">
+            <h2>Atualizar Usuário</h2>
+            <div class="form-container">
+                <div class="form-group full">
+                    <label>ID do Usuário *</label>
+                    <input type="text" id="e-id" placeholder="Digite o ID do usuário que deseja atualizar"/>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label>Nome</label>
+                        <input type="text" id="e-nome" placeholder="Digite o nome do usuário..."/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Email</label>
+                        <input type="text" id="e-email" placeholder="Digite o email do usuário..."/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Username</label>
+                        <input type="text" id="e-username" placeholder="Digite o username do usuário..."/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Senha</label>
+                        <textarea id="e-senha" placeholder="Digite a senha... (min. 8 caracteres)" minlength="8"></textarea>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="atualizar()">Atualizar</button>
+                    <button class="btn btn-secondary" onclick="CancelarForm()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <div id="deletar" class="section">
+            <h2>Deletar Usuário</h2>
+            <div class="search-bar">
+                <input type="text" id="d-input-id" placeholder="Digite o ID do usuário que deseja deletar" onkeydown="if(event.key==='Enter') deletarPorInput()"/>
+                <button class="btn btn-danger" onclick="deletarPorInput()">Deletar</button>
+            </div>
+        </div>
+        <div id="adicionar" class="section">
+            <h2>Adicionar / Atualizar Foto de Perfil</h2>
+            <div class="form-container">
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label>ID do Usuário *</label>
+                        <input type="text" id="foto-id" placeholder="Cole o UUID do usuário"/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Foto de Perfil *</label>
+                        <input type="file" id="foto-arquivo" accept="image/*"/>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="atualizarFoto()">Enviar Foto</button>
+                    <button class="btn btn-secondary" onclick="cancelarFoto()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <div id="remover" class="section">
+            <h2>Remover Foto de Perfil</h2>
+            <p style="color:var(--muted); margin-bottom:1rem; font-size:0.9rem">
+                Informe o ID do usuário para remover a foto de perfil.
+            </p>
+            <div class="search-bar">
+                <input type="text" id="remover-foto-id" placeholder="Cole o UUID do usuário..."/>
+                <button class="btn btn-danger" onclick="removerFotoInput()">Remover</button>
+            </div>
+        </div>
+        <div id="toast"></div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 SerratecFlix. Todos os direitos reservados.</p>
+            <ul class="footer-links">
+                <li><a href="../pages/termos.html">Termos e condições de uso</a></li>
+                <li><a href="../pages/privacidade.html">Política de privacidade</a></li>
+                <li><a href="../pages/sobre.html">Sobre</a></li>
+            </ul>
+        </div>
+    </footer>
+    <script src="../js/script.js"></script>
+    <script src="../js/usuario.js"></script>
+</body>
+</html>
