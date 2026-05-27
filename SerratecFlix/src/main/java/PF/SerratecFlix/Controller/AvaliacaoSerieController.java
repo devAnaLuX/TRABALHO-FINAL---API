@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import PF.SerratecFlix.DTO.Request.AvaliacaoSerieDTORequest;
 import PF.SerratecFlix.DTO.Response.AvaliacaoSerieDTOResponse;
 import PF.SerratecFlix.Service.AvaliacaoSerieService;
@@ -67,5 +68,12 @@ public class AvaliacaoSerieController {
     public ResponseEntity<Void> deletar(@PathVariable UUID id) {
 		avaliacaoserieService.deletar(id);
         return ResponseEntity.noContent().build();
+    }
+	
+	@GetMapping("/serie/{serieId}/media")
+    @Operation(summary = "Calcular a nota média de uma série")
+    public ResponseEntity<Double> buscarNotaMediaDoSerie(@PathVariable UUID serieId) {
+        Double media = avaliacaoserieService.obterNotaMediaDoSerie(serieId);
+        return ResponseEntity.ok(media);
     }
 }
