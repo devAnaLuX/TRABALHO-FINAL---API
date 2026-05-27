@@ -72,6 +72,22 @@ public class AvaliacaoFilmeService {
 				avaliacaoFilmeRepository.deleteById(id);
 			}
 			
+			@Transactional(readOnly = true)
+			public Double obterNotaMediaDoFilme(UUID filmeId) {
+				if (!filmeRepository.existsById(filmeId)) {
+					throw new ResourceNotFoundException("Filme não encontrado para calcular a média.");
+				}
+				Long totalAvaliacoes = avaliacaoFilmeRepository.contarAvaliacoesDoFilme(filmeId);
+				
+				if (totalAvaliacoes == 0) {
+					return 0.0;
+				}
+				
+				Double somaNotas = avaliacaoFilmeRepository.somarNotasDoFilme(filmeId);
+				
+				return somaNotas / totalAvaliacoes;
+			}
+			
 			private void preencherDados(AvaliacaoFilme avaliacao, AvaliacaoFilmeDTORequest dto) {
 				avaliacao.setNota(dto.getNota());
 				avaliacao.setComentario(dto.getComentario());
