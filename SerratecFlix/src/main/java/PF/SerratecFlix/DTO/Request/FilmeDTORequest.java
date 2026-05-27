@@ -1,7 +1,14 @@
 package PF.SerratecFlix.DTO.Request;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import PF.SerratecFlix.Domain.AvaliacaoFilme;
+import PF.SerratecFlix.Domain.Categoria;
+import PF.SerratecFlix.Domain.ListaFavoritos;
 import io.swagger.v3.oas.annotations.media.Schema;
 import PF.SerratecFlix.Enumerated.ClassificacaoIndicativa;
 import jakarta.validation.constraints.NotBlank;
@@ -40,4 +47,7 @@ public class FilmeDTORequest {
     @Schema(description = "Nota para o filme de 0 a 10")
     private Double notaMedia;
 
+    private List<AvaliacaoFilme> avaliacoes = new ArrayList<>();
+    private Set<Categoria> categorias = new HashSet<>();
+    private List<ListaFavoritos> listasFavoritos = new ArrayList<>();
 }

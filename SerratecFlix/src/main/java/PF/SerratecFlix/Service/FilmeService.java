@@ -67,17 +67,6 @@ public class FilmeService {
     }
  
     private FilmeDTOResponse toResponse(Filme f) {
-        return new FilmeDTOResponse(
-            f.getId(),
-            f.getTitulo(),
-            f.getDescricao(),
-            f.getDuracao(),
-            f.getDataLancamento(),
-            f.getClassificacaoIndicativa(),
-            f.getNotaMedia(),
-            f.getAvaliacoes(),
-            f.getCategorias(),
-            f.getListasFavoritos()
-        );
+        return new FilmeDTOResponse(f);
     }
 }
