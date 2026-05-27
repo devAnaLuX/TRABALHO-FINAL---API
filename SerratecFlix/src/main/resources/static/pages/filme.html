@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SerratecFlix — Filme</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Serratec<span>Flix</span></div>
+        <nav class="navbar">
+            <button class="menu-toggle" aria-label="Abrir menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../pages/serie.html">Série</a></li>
+                <li><a href="../pages/filme.html">Filme</a></li>
+                <li><a href="../pages/categoria.html">Categoria</a></li>
+                <li><a href="../pages/avaliacao.html">Avaliação</a></li>
+                <li><a href="../pages/favoritos.html">Favoritos</a></li>
+                <li><a href="../pages/usuario.html">Usuário</a></li>
+                <li><a href="../pages/sobre.html">Sobre</a></li>
+                <li><a href="../pages/login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <nav class="nav-api">
+            <button class="nav-api-btn active">🎬 Filme</button>
+            <button class="nav-api-btn">🔍 ID</button>
+            <button class="nav-api-btn">🧭 Título</button>
+            <button class="nav-api-btn">＋ Cadastrar</button>
+            <button class="nav-api-btn">🔄 Atualizar</button>
+            <button class="nav-api-btn">&minus; Deletar</button>
+        </nav>
+        <div id="listar" class="section active">
+            <h2>Catálogo de Filmes</h2>
+            <div id="grid" class="grid">
+                <div class="loading">Carregando filmes...</div>
+            </div>
+            <div class="pagination">
+                <button class="btn btn-secondary btn-sm" id="btn-prev" onclick="mudarPagina(-1)">← Anterior</button>
+                <span class="page-info" id="page-info">Página 1</span>
+                <button class="btn btn-secondary btn-sm" id="btn-next" onclick="mudarPagina(1)">Próxima →</button>
+            </div>
+        </div>
+        <div id="buscar-id" class="section">
+            <h2>Buscar Filme por ID</h2>
+            <div class="search-bar">
+                <input type="text" id="input-id" placeholder="Digite o ID do filme..." onkeydown="if(event.key==='Enter') buscarPorId()"/>
+                <button class="btn btn-primary" onclick="buscarPorId()">Buscar</button>
+            </div>
+            <div id="id-result" class="id-result"></div>
+        </div>
+        <div id="buscar-titulo" class="section">
+            <h2>Buscar Filme por Título</h2>
+            <div class="search-bar">
+                <input type="text" id="input-titulo" placeholder="Digite o título do filme..." onkeydown="if(event.key==='Enter') buscarPorTitulo()"/>
+                <button class="btn btn-primary" onclick="buscarPorTitulo()">Buscar</button>
+            </div>
+            <div id="busca-grid" class="grid"></div>
+        </div>
+        <div id="cadastrar" class="section">
+            <h2>Cadastrar Filme</h2>
+            <div class="form-container">
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label>Título *</label>
+                        <input type="text" id="c-titulo" placeholder="Nome do filme"/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Descrição *</label>
+                        <textarea id="c-descricao" placeholder="Sinopse do filme (máx. 1000 caracteres)" maxlength="1000"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Duração (minutos)</label>
+                        <input type="number" id="c-duracao" placeholder="Ex: 120" min="1"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Lançamento</label>
+                        <input type="date" id="c-data"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Classificação Indicativa</label>
+                        <select id="c-classificacao">
+                            <option value="">— Selecione —</option>
+                            <option value="LIVRE">Livre</option>
+                            <option value="DEZ">10 anos</option>
+                            <option value="DOZE">12 anos</option>
+                            <option value="QUATORZE">14 anos</option>
+                            <option value="DEZESSEIS">16 anos</option>
+                            <option value="DEZOITO">18 anos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nota Média (0–10)</label>
+                        <input type="number" id="c-nota" placeholder="Ex: 8.5" min="0.01" max="10" step="0.1"/>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="cadastrar()">Cadastrar</button>
+                    <button class="btn btn-secondary" onclick="limparForm()">Limpar</button>
+                </div>
+            </div>
+        </div>
+        <div id="atualizar" class="section">
+            <h2>Atualizar Filme</h2>
+            <div class="form-container">
+                <div class="form-group full">
+                    <label>ID do Filme *</label>
+                    <input type="text" id="e-id" placeholder="Digite o ID do filme que deseja atualizar"/>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label>Título</label>
+                        <input type="text" id="e-titulo" placeholder="Nome do filme"/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Descrição</label>
+                        <textarea id="e-descricao" placeholder="Sinopse do filme (máx. 1000 caracteres)" maxlength="1000"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Duração (minutos)</label>
+                        <input type="number" id="e-duracao" placeholder="Ex: 120" min="1"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Lançamento</label>
+                        <input type="date" id="e-data"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Classificação Indicativa</label>
+                        <select id="e-classificacao">
+                            <option value="">— Selecione —</option>
+                            <option value="LIVRE">Livre</option>
+                            <option value="DEZ">10 anos</option>
+                            <option value="DOZE">12 anos</option>
+                            <option value="QUATORZE">14 anos</option>
+                            <option value="DEZESSEIS">16 anos</option>
+                            <option value="DEZOITO">18 anos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nota Média (0–10)</label>
+                        <input type="number" id="e-nota" placeholder="Ex: 8.5" min="0.01" max="10" step="0.1"/>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="atualizar()">Atualizar</button>
+                    <button class="btn btn-secondary" onclick="CancelarForm()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <div id="deletar" class="section">
+            <h2>Deletar Filme</h2>
+            <div class="search-bar">
+                <input type="text" id="d-input-id" placeholder="Digite o ID do filme que deseja deletar" onkeydown="if(event.key==='Enter') deletarPorInput()"/>
+                <button class="btn btn-danger" onclick="deletarPorInput()">Deletar</button>
+            </div>
+        </div>
+        <div id="toast"></div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 SerratecFlix. Todos os direitos reservados.</p>
+            <ul class="footer-links">
+                <li><a href="../pages/termos.html">Termos e condições de uso</a></li>
+                <li><a href="../pages/privacidade.html">Política de privacidade</a></li>
+                <li><a href="../pages/sobre.html">Sobre</a></li>
+            </ul>
+        </div>
+    </footer>
+    <script src="../js/script.js"></script>
+    <script src="../js/filme.js"></script>
+</body>
+</html>
+
+  
