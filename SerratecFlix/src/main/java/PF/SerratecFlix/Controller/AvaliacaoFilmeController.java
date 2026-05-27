@@ -57,4 +57,10 @@ public class AvaliacaoFilmeController {
 		avaliacaoFilmeService.remover(id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	@GetMapping("/filme/{filmeId}/media")
+	public ResponseEntity<Double> buscarNotaMediaDoFilme(@PathVariable UUID filmeId) {
+		Double media = avaliacaoFilmeService.obterNotaMediaDoFilme(filmeId);
+		return ResponseEntity.ok(media);
+	}
 }
