@@ -67,4 +67,9 @@ public class Usuario {
         this.dataCriacao = LocalDateTime.now();
     }
 
+    public String getFotoPerfilUrl() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getFotoPerfilUrl'");
+    }
+
 }
