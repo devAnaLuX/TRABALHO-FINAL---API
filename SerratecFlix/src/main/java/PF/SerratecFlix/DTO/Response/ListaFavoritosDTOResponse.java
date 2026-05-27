@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
         "nomeLista",
         "privada",
         "dataCriacao",
-        "usuarioId",
+        "usuarioNome",
         "filmes",
         "series"
 })
@@ -32,7 +32,7 @@ public class ListaFavoritosDTOResponse {
     private String nomeLista;
     private Boolean privada;
     private LocalDateTime dataCriacao;
-    private UUID usuarioId;
+    private String usuarioNome;
     private Set<String> filmes = new HashSet<>();
     private Set<String> series = new HashSet<>();
 
@@ -41,7 +41,7 @@ public class ListaFavoritosDTOResponse {
         this.nomeLista = listaFavoritos.getNomeLista();
         this.privada = listaFavoritos.getPrivada();
         this.dataCriacao = listaFavoritos.getDataCriacao();
-        this.usuarioId = listaFavoritos.getUsuario().getId();
+        this.usuarioNome = listaFavoritos.getUsuario().getNome();
         this.filmes = listaFavoritos.getFilmes()
                 .stream()
                 .map(Filme::getTitulo)

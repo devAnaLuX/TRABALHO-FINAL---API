@@ -4,24 +4,23 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import PF.SerratecFlix.Domain.AvaliacaoSerie;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 @Data
 @NoArgsConstructor
+@JsonPropertyOrder
+		({ "id", "nota", "comentario", "dataAvaliacao", "usuario", "serie" })
 public class AvaliacaoSerieDTOResponse {
-	
-	
+
 	private UUID id;
     private Double nota;
     private String comentario;
     private LocalDateTime dataAvaliacao;
-    private UUID usuarioId;
-    private String nomeUsuario;
-    private UUID serieId;
-    private String tituloSerie;
-    
+    private String usuario;
+    private String serie;
 
 	public AvaliacaoSerieDTOResponse(AvaliacaoSerie a) {
 		super();
@@ -29,10 +28,8 @@ public class AvaliacaoSerieDTOResponse {
 		this.nota = a.getNota();
 		this.comentario = a.getComentario();
 		this.dataAvaliacao = a.getDataAvaliacao();
-		this.usuarioId = a.getUsuario().getId();
-		this.nomeUsuario = a.getComentario();
-		this.serieId = a.getSerie().getId();
-		this.tituloSerie = a.getSerie().getTitulo();
+		this.usuario = a.getUsuario().getNome();
+		this.serie = a.getSerie().getTitulo();
 	}
 	
 	

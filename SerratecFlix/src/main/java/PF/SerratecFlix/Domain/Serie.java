@@ -1,5 +1,6 @@
 package PF.SerratecFlix.Domain;
 
+import PF.SerratecFlix.Enumerated.ClassificacaoIndicativa;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -40,6 +41,10 @@ public class Serie {
 
     @Column(name = "nota_media")
     private Double notaMedia;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "classificacao_indicativa")
+    private ClassificacaoIndicativa classificacaoIndicativa;
 
     @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL)
     private List<AvaliacaoSerie> avaliacoes = new ArrayList<>();

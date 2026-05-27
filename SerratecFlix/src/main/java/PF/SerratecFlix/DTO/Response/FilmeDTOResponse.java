@@ -10,11 +10,24 @@ import PF.SerratecFlix.Domain.Filme;
 import PF.SerratecFlix.Domain.ListaFavoritos;
 import PF.SerratecFlix.Enumerated.ClassificacaoIndicativa;
 import PF.SerratecFlix.Domain.AvaliacaoFilme;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+@JsonPropertyOrder({
+        "categorias",
+        "titulo",
+        "notaMedia",
+        "descricao",
+        "duracao",
+        "dataLancamento",
+        "classificacaoIndicativa",
+        "avaliacoes",
+        "listasFavoritos",
+        "id"
+})
 @Getter
 @Setter
 @NoArgsConstructor

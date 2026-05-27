@@ -14,24 +14,23 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @JsonPropertyOrder
-({ "id", "nota", "comentario", "dataAvaliacao", "usuarioId", "filmeId" })
+({ "id", "nota", "comentario", "dataAvaliacao", "usuario", "filme" })
 public class AvaliacaoFilmeDTOResponse {
 	
 	private UUID id;
 	private Double nota;
 	private String comentario;
 	private LocalDateTime dataAvaliacao;
-	private UUID usuarioId;
-	private UUID filmeId;
+	private String usuario;
+	private String filme;
 	
 	public AvaliacaoFilmeDTOResponse(AvaliacaoFilme avaliacao) {
 		this.id = avaliacao.getId();
 		this.nota = avaliacao.getNota();
 		this.comentario = avaliacao.getComentario();
 		this.dataAvaliacao = avaliacao.getDataAvaliacao();
-		this.usuarioId = avaliacao.getUsuario().getId();
-		this.filmeId = avaliacao.getFilme().getId();
+		this.usuario = avaliacao.getUsuario().getNome();
+		this.filme = avaliacao.getFilme().getTitulo();
 	}
 }
