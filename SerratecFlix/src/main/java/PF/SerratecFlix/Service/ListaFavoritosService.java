@@ -36,7 +36,7 @@ public class ListaFavoritosService {
     private SerieRepository serieRepository;
 
     @Autowired
-    private GeminiService geminiService;
+    private GroqService groqService;
 
     public List<ListaFavoritosDTOResponse> buscar(){
         return listaFavoritosRepository.findAll()
@@ -134,7 +134,7 @@ public class ListaFavoritosService {
             Seja objetivo e explique brevemente o motivo de cada recomendação.
             """, filmes, series);
 
-        return geminiService.obterRecomendacoes(prompt);
+        return groqService.obterRecomendacoes(prompt);
 
     }
 }
