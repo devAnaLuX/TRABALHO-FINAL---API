@@ -1,12 +1,11 @@
 package PF.SerratecFlix.Service;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import PF.SerratecFlix.DTO.Request.SerieDTORequest;
 import PF.SerratecFlix.DTO.Response.SerieDTOResponse;
 import PF.SerratecFlix.Domain.Serie;
@@ -30,11 +29,9 @@ public class SerieService {
         return new SerieDTOResponse(serieRepository.save(serie));
     }
 
-    public List<SerieDTOResponse> listarTodos() {
-        return serieRepository.findAll()
-                .stream()
-                .map(SerieDTOResponse::new)
-                .collect(Collectors.toList());
+    public Page<SerieDTOResponse> listarTodos(Pageable pageable) {
+        return serieRepository.findAll(pageable)
+                .map(SerieDTOResponse::new);
     }
 
     public SerieDTOResponse buscarPorId(UUID id) {

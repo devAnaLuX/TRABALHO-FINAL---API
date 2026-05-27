@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import PF.SerratecFlix.Enumerated.ClassificacaoIndicativa;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -51,4 +52,6 @@ public class SerieDTORequest {
     
     private Set<UUID> categorias = new HashSet<>();
     
+    @Schema(description = "Classificação Indicativa")
+    private ClassificacaoIndicativa classificacaoIndicativa;
 }
