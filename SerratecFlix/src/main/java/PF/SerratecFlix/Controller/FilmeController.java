@@ -56,6 +56,13 @@ public class FilmeController {
     public ResponseEntity<List<FilmeDTOResponse>> buscarPorTitulo(@RequestParam String titulo) {
         return ResponseEntity.ok(filmeService.buscarPorTitulo(titulo));
     }
+    
+    @GetMapping("/categoria/{categoriaId}")
+    @Operation(summary = "Listar filmes por categoria")
+    public ResponseEntity<List<FilmeDTOResponse>> listarPorCategoria(@PathVariable UUID categoriaId) {
+        List<FilmeDTOResponse> lista = filmeService.listarPorCategoria(categoriaId);
+        return ResponseEntity.ok(lista);
+    }
 
     @PostMapping
     @Operation(summary = "Cadastrar filme")

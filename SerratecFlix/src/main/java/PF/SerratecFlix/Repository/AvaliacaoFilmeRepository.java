@@ -1,5 +1,6 @@
 package PF.SerratecFlix.Repository;
 
+
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,5 @@ public interface AvaliacaoFilmeRepository extends JpaRepository<AvaliacaoFilme, 
 	
 	@Query("SELECT COUNT(a) FROM AvaliacaoFilme a WHERE a.filme.id = :filmeId")
 	Long contarAvaliacoesDoFilme(@Param("filmeId") UUID filmeId);
+	
 }
