@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,19 +28,24 @@ public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Schema(description = "Identificador único da categoria", example = "550e8400-e29b-41d4-a716-446655440000")
     private UUID id;
 
     @NotBlank
     @Column(nullable = false, unique = true, length = 50)
+    @Schema(description = "Nome da categoria", example = "Ação")
     private String nome;
 
     @Column(nullable = true, length = 250)
+    @Schema(description = "Descrição da categoria", example = "Filmes e séries com muita adrenalina e aventura")
     private String descricao;
 
     @ManyToMany(mappedBy = "categorias")
+    @Schema(description = "Filmes associados a esta categoria")
     private Set<Filme> filmes = new HashSet<>();
 
     @ManyToMany(mappedBy = "categorias")
+    @Schema(description = "Séries associadas a esta categoria")
     private Set<Serie> series = new HashSet<>();
 
 }

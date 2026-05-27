@@ -40,5 +40,4 @@ public class UsuarioDTOResponse {
     private LocalDateTime dataCriacao;
 
 
-
 }
