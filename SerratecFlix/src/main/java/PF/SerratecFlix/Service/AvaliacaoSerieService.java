@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import PF.SerratecFlix.DTO.Request.AvaliacaoSerieDTORequest;
 import PF.SerratecFlix.DTO.Response.AvaliacaoSerieDTOResponse;
@@ -88,4 +89,22 @@ public class AvaliacaoSerieService {
         }
         avaliacaoSerieRepository.deleteById(id);
     }
+    
+    @Transactional(readOnly = true)
+	public Double obterNotaMediaDoSerie(UUID serieId) {
+		if (!serieRepository.existsById(serieId)) {
+			throw new ResourceNotFoundException("Série não encontrada com id: " + serieId);
+		}
+		
+		Long totalAvaliacoes = avaliacaoSerieRepository.contarAvaliacoesDaSerie(serieId);
+		
+		if (totalAvaliacoes == 0) {
+			return 0.0;
+		}
+		
+		Double somaNotas = avaliacaoSerieRepository.somarNotasDaSerie(serieId);
+		
+		return somaNotas / totalAvaliacoes;
+	}
+    
 }
