@@ -38,6 +38,9 @@ public class ListaFavoritosService {
     @Autowired
     private GroqService groqService;
 
+    @Autowired
+    private EmailService emailService;
+
     public List<ListaFavoritosDTOResponse> buscar(){
         return listaFavoritosRepository.findAll()
                 .stream()
@@ -134,7 +137,32 @@ public class ListaFavoritosService {
             Seja objetivo e explique brevemente o motivo de cada recomendação.
             """, filmes, series);
 
-        return groqService.obterRecomendacoes(prompt);
+        String recomendacao = groqService.obterRecomendacoes(prompt);
+
+        String html = String.format("""
+    <div style="font-family: 'Poppins', sans-serif; max-width: 600px; margin: auto; background: #1a1a2e; color: #ffffff; padding: 30px; border-radius: 10px;">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+        <h1 style="color: #e94560; text-align: center; font-weight: 600;">🎬 SerratecFlix</h1>
+        <h2 style="color: #ffffff; text-align: center; font-weight: 400;">Suas Recomendações Personalizadas</h2>
+        <hr style="border-color: #e94560;">
+        <div style="background: #16213e; padding: 20px; border-radius: 8px; margin-top: 20px;">
+            <p style="color: #a8a8b3; font-size: 14px; font-weight: 300;">Com base nos seus favoritos, separamos isso para você:</p>
+            <p style="color: #ffffff; line-height: 1.8; white-space: pre-line;">%s</p>
+        </div>
+        <p style="text-align: center; color: #a8a8b3; font-size: 12px; margin-top: 20px;">SerratecFlix © 2026</p>
+    </div>
+    """, recomendacao);
+
+        try{
+            String emailUsuario = listaFavoritos.getUsuario().getEmail();
+            emailService.enviarEmail("luisamelo2807@gmail.com",
+                    "\uD83C\uDFAC Suas recomendações SerratecFlix!",
+                    html);
+        } catch (Exception e) {
+            System.out.println("Erro ao enviar e-mail: "+e.getMessage());
+        }
+
+        return recomendacao;
 
     }
 }

@@ -16,10 +16,10 @@ public class EmailService {
         MimeMessage mensagem = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mensagem, true, "UTF-8");
 
-        helper.setFrom("hello@demomailtrap.co");
+        helper.setFrom("hello@demomailtrap.co", "SerratecFlix");
         helper.setTo(destinatario);
         helper.setSubject(assunto);
-        helper.setText(corpo, false);
+        helper.setText(corpo, true);
 
         mailSender.send(mensagem);
     }
