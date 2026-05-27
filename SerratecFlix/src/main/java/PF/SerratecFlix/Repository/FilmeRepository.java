@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface FilmeRepository extends JpaRepository<Filme, UUID> {
 	List<Filme> findByTituloContainingIgnoreCase(String titulo);
+	
+	List<Filme> findByCategorias_Id(UUID categoriaId);
 }

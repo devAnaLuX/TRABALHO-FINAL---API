@@ -7,10 +7,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import PF.SerratecFlix.DTO.Request.FilmeDTORequest;
 import PF.SerratecFlix.DTO.Response.FilmeDTOResponse;
@@ -72,6 +72,14 @@ public class FilmeService {
             throw new ResourceNotFoundException("Filme com ID " + id + " não encontrado");
         }
         filmeRepository.deleteById(id);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<FilmeDTOResponse> listarPorCategoria(UUID categoriaId) {
+        return filmeRepository.findByCategorias_Id(categoriaId)
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
     private void preencherDados(Filme f, FilmeDTORequest request) {
