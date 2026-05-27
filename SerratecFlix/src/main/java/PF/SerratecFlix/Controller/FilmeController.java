@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import PF.SerratecFlix.Service.FilmeService;
 import PF.SerratecFlix.DTO.Response.FilmeDTOResponse;
@@ -32,8 +36,13 @@ public class FilmeController {
 
     @GetMapping
     @Operation(summary = "Listar filmes")
-    public ResponseEntity<List<FilmeDTOResponse>> listar() {
-        return ResponseEntity.ok(filmeService.listar());
+    public ResponseEntity<Page<FilmeDTOResponse>> listar(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "titulo") String orderBy) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+        return ResponseEntity.ok(filmeService.listarPaginado(pageable));
     }
 
     @GetMapping("/{id}")

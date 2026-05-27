@@ -344,14 +344,13 @@ A aplicação utiliza:
 
 ---
 
-# 👨‍💻 Integrantes
+# 👩‍💻 Integrantes
 
-* Adriane Tranhaqui
-* Ana Luisa
-* Melissa Lima
-* Raquel Taveira
-* Vitória de Paula
-
+* **Adriane Tranhaqui** - [GitHub](https://github.com/AdrianeTranhaqui) | [LinkedIn](https://www.linkedin.com/in/adriane-tranhaqui-356806353/)
+* **Ana Luísa da Cunha Reis** - [GitHub](https://github.com/devAnaLuX) | [LinkedIn](https://www.linkedin.com/in/ana-luisa-cunha-reis-8baa563a3/)
+* **Melissa Lima** - [GitHub](https://github.com/melissa-lima21) | [LinkedIn](https://www.linkedin.com/in/melissa-lima-0628a324b/)
+* **Raquel Taveira** - [GitHub](https://github.com/Raquel-Beep) | [LinkedIn](https://www.linkedin.com/in/raquel-taveira-02668423b/)
+* **Vitória Zanchet** - [GitHub](https://github.com/vitoriazanchet) | [LinkedIn](https://www.linkedin.com/in/vitoria-zanchet)
 
 ---
 
