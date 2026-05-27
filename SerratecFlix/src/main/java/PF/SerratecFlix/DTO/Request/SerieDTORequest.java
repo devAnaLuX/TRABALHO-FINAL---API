@@ -1,6 +1,9 @@
 package PF.SerratecFlix.DTO.Request;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
@@ -45,5 +48,7 @@ public class SerieDTORequest {
     @Positive(message = "Nota deve ser positivo")
     @Schema(description = "Nota para a série de 0 a 10", example = "9")
     private Double notaMedia;
+    
+    private Set<UUID> categorias = new HashSet<>();
     
 }

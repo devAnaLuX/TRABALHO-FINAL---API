@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import PF.SerratecFlix.DTO.Request.CategoriaDTORequest;
 import PF.SerratecFlix.DTO.Response.CategoriaDTOResponse;
 import PF.SerratecFlix.Domain.Categoria;
+import PF.SerratecFlix.Exception.DuplicateEntryException;
+import PF.SerratecFlix.Exception.ResourceNotFoundException;
 import PF.SerratecFlix.Repository.CategoriaRepository;
 
 @Service
