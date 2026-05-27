@@ -2,6 +2,9 @@ package PF.SerratecFlix.Controller;
 
 import java.net.URI;
 import java.util.UUID;
+
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +37,12 @@ public class SerieController {
     private SerieService serieService;
 	
 	@GetMapping
-	@Operation(summary = "Listar todas as séries")
+    @Operation(summary = "Buscar séries", description = "Busca todas as séries")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busca concluída."),
+            @ApiResponse(responseCode = "403", description = "Não autorizado"),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
+    })
 	public ResponseEntity<Page<SerieDTOResponse>> listarTodos(
 	        @RequestParam(defaultValue = "0") int page,
 	        @RequestParam(defaultValue = "10") int size,
@@ -45,13 +53,27 @@ public class SerieController {
 	}
 	
 	@GetMapping("/{id}")
-    @Operation(summary = "Buscar série por ID")
+    @Operation(summary = "Buscar série - ID", description = "Busca série pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busca concluída."),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos."),
+            @ApiResponse(responseCode = "404", description = "Série não encontrada."),
+            @ApiResponse(responseCode = "403", description = "Não autorizado"),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
+    })
     public ResponseEntity<SerieDTOResponse> buscarPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(serieService.buscarPorId(id));
     }
 	
 	@PostMapping
-    @Operation(summary = "Cadastrar série")
+    @Operation(summary = "Adicionar série", description = "Adiciona série")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Criado."),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos."),
+            @ApiResponse(responseCode = "403", description = "Não autorizado"),
+            @ApiResponse(responseCode = "409", description = "Conflito de dados"),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
+    })
     public ResponseEntity<SerieDTOResponse> criar(@Valid @RequestBody SerieDTORequest dto) {
 		SerieDTOResponse response = serieService.criar(dto);
     	
@@ -65,13 +87,28 @@ public class SerieController {
     }
 	
 	@PutMapping("/{id}")
-    @Operation(summary = "Atualizar serie")
+    @Operation(summary = "Atualizar série - ID", description = "Atualizar série por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Atualizado."),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos."),
+            @ApiResponse(responseCode = "403", description = "Não autorizado"),
+            @ApiResponse(responseCode = "404", description = "Série não encontrada."),
+            @ApiResponse(responseCode = "409", description = "Conflito de dados"),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
+    })
     public ResponseEntity<SerieDTOResponse> atualizar(@PathVariable UUID id, @Valid @RequestBody SerieDTORequest dto) {
         return ResponseEntity.ok(serieService.atualizar(id, dto));
     }
 	
 	@DeleteMapping("/{id}")
-    @Operation(summary = "Remover serie")
+    @Operation(summary = "Deletar série - ID", description = "Deletar série pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Deletado."),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos."),
+            @ApiResponse(responseCode = "403", description = "Não autorizado"),
+            @ApiResponse(responseCode = "404", description = "Série não encontrada."),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
+    })
     public ResponseEntity<Void> deletar(@PathVariable UUID id) {
         serieService.deletar(id);
         return ResponseEntity.noContent().build();
