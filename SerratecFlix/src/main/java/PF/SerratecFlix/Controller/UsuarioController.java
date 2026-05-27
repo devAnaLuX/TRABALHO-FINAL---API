@@ -42,68 +42,41 @@ public class UsuarioController {
     @Operation(summary = "Obter um usuário por ID")
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTOResponse> obterUsuarioPorId(@PathVariable UUID id) {
-        // Lógica para obter um usuário por ID
-        UsuarioDTOResponse usuarioDTOResponse = new UsuarioDTOResponse();
-        // Retornar a resposta com o usuário encontrado
+        UsuarioDTOResponse usuarioDTOResponse = usuarioService.findById(id);
         return ResponseEntity.ok(usuarioDTOResponse);
     }
 
     @Operation(summary = "Atualizar um usuário")
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioDTOResponse> atualizarUsuario(
-        @PathVariable UUID id,
-        @Valid @RequestBody UsuarioDTORequest usuarioDTORequest) {
-        // Lógica para atualizar um usuário existente
-        UsuarioDTOResponse usuarioDTOResponse = new UsuarioDTOResponse();
-        // Retornar a resposta com o usuário atualizado
+            @PathVariable UUID id,
+            @Valid @RequestBody UsuarioDTORequest usuarioDTORequest) {
+        UsuarioDTOResponse usuarioDTOResponse = usuarioService.update(id, usuarioDTORequest);
         return ResponseEntity.ok(usuarioDTOResponse);
     }
 
     @Operation(summary = "Deletar um usuário")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable UUID id) {
-        // Lógica para deletar um usuário por ID
+        usuarioService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-     @Operation(summary = "Adicionar ou atualizar foto de perfil")
+    @Operation(summary = "Adicionar ou atualizar foto de perfil")
     @PostMapping("/{id}/foto-perfil")
     public ResponseEntity<UsuarioDTOResponse> adicionarFotoPerfil(
-        @PathVariable UUID id,
-        @RequestParam("foto") MultipartFile ) {
-
-        UsuarioDTOResponse usuario =
-                usuarioService.adicionarFotoPerfil(id, foto);
-
+            @PathVariable UUID id,
+            @RequestParam("foto") MultipartFile foto) {
+        UsuarioDTOResponse usuario = usuarioService.adicionarFotoPerfil(id, foto);
         return ResponseEntity.ok(usuario);
     }
 
-
     @Operation(summary = "Remover foto de perfil")
-        @DeleteMapping("/{id}/foto-perfil")
-        public ResponseEntity<Void> removerFotoPerfil(
-                @PathVariable UUID id) {
-
-            usuarioService.removerFotoPerfil(id);
-
-            return ResponseEntity.noContent().build();
+    @DeleteMapping("/{id}/foto-perfil")
+    public ResponseEntity<Void> removerFotoPerfil(@PathVariable UUID id) {
+        usuarioService.removerFotoPerfil(id);
+        return ResponseEntity.noContent().build();
     }
-
-     @Operation(summary = "Adicionar ou atualizar foto de perfil")
-        @PostMapping("/{id}/foto-perfil")
-        public ResponseEntity<UsuarioDTOResponse> adicionarFotoPerfil(
-            @PathVariable UUID id,
-            @RequestParam("foto") MultipartFile foto) {
-            return ResponseEntity.ok(usuarioService.adicionarFotoPerfil(id, foto));
-        }
-    
-        @Operation(summary = "Remover foto de perfil")
-        @DeleteMapping("/{id}/foto-perfil")
-        public ResponseEntity<Void> removerFotoPerfil(@PathVariable UUID id) {
-            usuarioService.removerFotoPerfil(id);
-            return ResponseEntity.noContent().build();
-    }
-
 
     @Operation(summary = "Criar lista de favoritos")
     @PostMapping("/{id}/listas-favoritos")
