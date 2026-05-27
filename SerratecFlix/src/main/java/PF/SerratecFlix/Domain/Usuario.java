@@ -72,4 +72,9 @@ public class Usuario {
         throw new UnsupportedOperationException("Unimplemented method 'getFotoPerfilUrl'");
     }
 
+    public void setFotoPerfilUrl(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setFotoPerfilUrl'");
+    }
+
 }

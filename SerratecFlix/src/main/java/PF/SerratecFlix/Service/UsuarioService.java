@@ -48,7 +48,7 @@ public class UsuarioService {
     public UsuarioDTOResponse save(UsuarioDTORequest usuarioDTORequest) {
         Usuario usuario = toEntity(usuarioDTORequest);
 
-         // Criptografa senha
+        // Criptografa senha
         encryptPassword(usuario, usuarioDTORequest);
 
         usuario = usuarioRepository.save(usuario);
@@ -56,6 +56,11 @@ public class UsuarioService {
         return toDTOResponse(usuario);
     }
 
+    public UsuarioDTOResponse findById(UUID id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+        return toDTOResponse(usuario);
+    }
 
     //atualização de um usuario existente
        public UsuarioDTOResponse update(UUID id, UsuarioDTORequest usuarioDTORequest) {
@@ -197,6 +202,11 @@ public class UsuarioService {
                 .username(dto.getUsername())
                 .senha(dto.getSenha())
                 .build();
+    }
+
+    public void removerFotoPerfil(UUID id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removerFotoPerfil'");
     }
 
     
