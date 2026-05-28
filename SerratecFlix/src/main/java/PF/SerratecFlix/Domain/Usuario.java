@@ -79,13 +79,11 @@ public class Usuario {
     }
 
     public String getFotoPerfilUrl() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFotoPerfilUrl'");
+        return this.fotoPerfil;
     }
 
-    public void setFotoPerfilUrl(String string) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setFotoPerfilUrl'");
+    public void setFotoPerfilUrl(String url) {
+        this.fotoPerfil = url;
     }
 
 }
