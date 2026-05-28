@@ -39,7 +39,17 @@ O **SerratecFlix** é uma API RESTful completa que simula o backend de uma plata
 - Documentação interativa com Swagger / OpenAPI
 
 ---
+## Imagens comprovando a conexão com o Swagger
 
+<img width="914" height="457" alt="Image" src="https://github.com/user-attachments/assets/9ac5ab46-b37b-4ef0-ab64-914a6a550eba" />
+
+
+## Imagens do FrontEnd do projeto
+
+<img width="1366" height="768" alt="Image" src="https://github.com/user-attachments/assets/98e97d23-4a8e-474a-acc4-0a0b3da9924d" />
+
+
+---
 ## 🚀 Tecnologias Utilizadas
 
 | Camada | Tecnologia |
