@@ -43,7 +43,12 @@ public class AvaliacaoSerieService {
         avaliacao.setUsuario(usuario);
         avaliacao.setSerie(serie);
 
-        return new AvaliacaoSerieDTOResponse(avaliacaoSerieRepository.save(avaliacao));
+        AvaliacaoSerie avaliacaoSalva = avaliacaoSerieRepository.save(avaliacao);
+     
+        
+        atualizarMediaNaSerie(dto.getSerieId());
+        
+        return new AvaliacaoSerieDTOResponse(avaliacaoSalva);
     }
 
     public List<AvaliacaoSerieDTOResponse> listarTodos() {
@@ -79,15 +84,25 @@ public class AvaliacaoSerieService {
 
         avaliacao.setNota(dto.getNota());
         avaliacao.setComentario(dto.getComentario());
+        
+        AvaliacaoSerie avaliacaoAtualizada = avaliacaoSerieRepository.save(avaliacao);
+        
+        atualizarMediaNaSerie(dto.getSerieId());
 
-        return new AvaliacaoSerieDTOResponse(avaliacaoSerieRepository.save(avaliacao));
+        return new AvaliacaoSerieDTOResponse(avaliacaoAtualizada);
     }
 
+    @Transactional
     public void deletar(UUID id) {
-        if (!avaliacaoSerieRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Avaliação não encontrada com id: " + id);
-        }
+        AvaliacaoSerie avaliacao = avaliacaoSerieRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Avaliação não encontrada com id: " + id));
+        
+        UUID serieId = avaliacao.getSerie().getId();
+        
         avaliacaoSerieRepository.deleteById(id);
+        avaliacaoSerieRepository.flush();
+        
+        atualizarMediaNaSerie(serieId);
     }
     
     @Transactional(readOnly = true)
@@ -106,5 +121,12 @@ public class AvaliacaoSerieService {
 		
 		return somaNotas / totalAvaliacoes;
 	}
-    
+    private void atualizarMediaNaSerie(UUID serieId) {
+        Serie serie = serieRepository.findById(serieId)
+                .orElseThrow(() -> new ResourceNotFoundException("Série não encontrada para atualizar média."));
+        
+        Double novaMedia = obterNotaMediaDoSerie(serieId);
+        serie.setNotaMedia(novaMedia);
+        serieRepository.save(serie);
+    }
 }

@@ -36,3 +36,4 @@ build/
 ### Configurações de Ambiente (Segurança) ###
 .env
 .env.local
+/bin/
