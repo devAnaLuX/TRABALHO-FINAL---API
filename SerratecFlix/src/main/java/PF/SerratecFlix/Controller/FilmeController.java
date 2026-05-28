@@ -2,6 +2,7 @@ package PF.SerratecFlix.Controller;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -33,6 +34,7 @@ import PF.SerratecFlix.DTO.Request.FilmeDTORequest;
 @RestController
 @RequestMapping("/filmes")
 @Tag(name = "Filme", description = "Gerenciamento completo de filme — CRUD")
+@SecurityRequirement(name = "bearerAuth")
 public class FilmeController {
 
     @Autowired

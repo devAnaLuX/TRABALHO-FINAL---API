@@ -6,6 +6,7 @@ import java.util.UUID;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ import jakarta.validation.Valid;
 @Tag(name = "Avaliações Filme", description = "Gerenciamento completo de avaliações filme — CRUD")
 @RestController
 @RequestMapping("/avaliacoes_filme")
+@SecurityRequirement(name = "bearerAuth")
 public class AvaliacaoFilmeController {
 	
 	@Autowired

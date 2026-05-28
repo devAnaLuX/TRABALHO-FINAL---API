@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -36,6 +37,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/series")
 @Tag(name = "Séries")
+@SecurityRequirement(name = "bearerAuth")
 public class SerieController {
 	
 	@Autowired
