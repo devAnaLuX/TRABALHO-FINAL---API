@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +29,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/avaliacaoserie")
 @Tag(name = "Avaliação série", description = "Gerenciamento completo de avaliações série — CRUD")
+@SecurityRequirement(name = "bearerAuth")
 public class AvaliacaoSerieController {
 	
 	@Autowired
