@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import PF.SerratecFlix.Exception.ResourceNotFoundException;
 import PF.SerratecFlix.DTO.Request.AvaliacaoFilmeDTORequest;
 import PF.SerratecFlix.DTO.Response.AvaliacaoFilmeDTOResponse;
 import PF.SerratecFlix.Domain.AvaliacaoFilme;
 import PF.SerratecFlix.Domain.Filme;
 import PF.SerratecFlix.Domain.Usuario;
+import PF.SerratecFlix.Exception.ResourceNotFoundException;
 import PF.SerratecFlix.Repository.AvaliacaoFilmeRepository;
 import PF.SerratecFlix.Repository.FilmeRepository;
 import PF.SerratecFlix.Repository.UsuarioRepository;
@@ -49,6 +49,7 @@ public class AvaliacaoFilmeService {
 			AvaliacaoFilme avaliacao = new AvaliacaoFilme();
 			preencherDados(avaliacao, dto);
 			avaliacao = avaliacaoFilmeRepository.save(avaliacao);
+			atualizarMediaNoFilme(dto.getFilmeId());
 			return new AvaliacaoFilmeDTOResponse(avaliacao);
 		}
 		
@@ -59,17 +60,25 @@ public class AvaliacaoFilmeService {
 	
 			preencherDados(avaliacaoExistente, dto);
 			avaliacaoExistente = avaliacaoFilmeRepository.save(avaliacaoExistente);
+			
+			atualizarMediaNoFilme(dto.getFilmeId());
 			return new AvaliacaoFilmeDTOResponse(avaliacaoExistente);
 		}
 			
 			
 			@Transactional
 			public void remover(UUID id) {
-				if (!avaliacaoFilmeRepository.existsById(id)) {
-					throw new ResourceNotFoundException("Não foi possível deletar. ID da avaliação não encontrado.");
-				}
+				AvaliacaoFilme avaliacao = avaliacaoFilmeRepository.findById(id)
+						.orElseThrow(() -> new ResourceNotFoundException("Não foi possível deletar. ID da avaliação não encontrado."));
+				
+				UUID filmeId = avaliacao.getFilme().getId();
 				
 				avaliacaoFilmeRepository.deleteById(id);
+				
+				avaliacaoFilmeRepository.flush();
+				
+
+				atualizarMediaNoFilme(filmeId);
 			}
 			
 			@Transactional(readOnly = true)
@@ -86,6 +95,14 @@ public class AvaliacaoFilmeService {
 				Double somaNotas = avaliacaoFilmeRepository.somarNotasDoFilme(filmeId);
 				
 				return somaNotas / totalAvaliacoes;
+			}
+			private void atualizarMediaNoFilme(UUID filmeId) {
+				Filme filme = filmeRepository.findById(filmeId)
+						.orElseThrow(() -> new ResourceNotFoundException("Filme não encontrado para atualizar média."));
+				
+				Double novaMedia = obterNotaMediaDoFilme(filmeId);
+				filme.setNotaMedia(novaMedia);
+				filmeRepository.save(filme);
 			}
 			
 			private void preencherDados(AvaliacaoFilme avaliacao, AvaliacaoFilmeDTORequest dto) {
