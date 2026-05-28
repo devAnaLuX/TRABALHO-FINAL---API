@@ -32,6 +32,7 @@
         <nav class="nav-api">
             <button class="nav-api-btn active">📺 Série</button>
             <button class="nav-api-btn">🔍 ID</button>
+            <button class="nav-api-btn">🔍 Categoria</button>
             <button class="nav-api-btn">＋ Cadastrar</button>
             <button class="nav-api-btn">🔄 Atualizar</button>
             <button class="nav-api-btn">&minus; Deletar</button>
@@ -54,6 +55,14 @@
                 <button class="btn btn-primary" onclick="buscarPorId()">Buscar</button>
             </div>
             <div id="id-result" class="id-result"></div>
+        </div>
+        <div id="buscar-titulo" class="section">
+            <h2>Buscar Série por Categoria</h2>
+            <div class="search-bar">
+                <input type="text" id="input-titulo" placeholder="Digite o ID da categoria..." onkeydown="if(event.key==='Enter') buscarPorCategoria()"/>
+                <button class="btn btn-primary" onclick="buscarPorCategoria()">Buscar</button>
+            </div>
+            <div id="busca-grid" class="grid"></div>
         </div>
         <div id="cadastrar" class="section">
             <h2>Cadastrar Série</h2>

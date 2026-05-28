@@ -20,7 +20,7 @@ function showSection(id) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     const sec = document.getElementById(id);
     if (sec) sec.classList.add('active');
-    const ids = ['listar', 'buscar-id', 'buscar-titulo', 'cadastrar', 'atualizar', 'deletar'];
+    const ids = ['listar', 'buscar-id', 'buscar-categoria', 'cadastrar', 'atualizar', 'deletar'];
     document.querySelectorAll('.nav-api-btn').forEach((b, i) => {
         b.classList.toggle('active', ids[i] === id);
     });
@@ -40,7 +40,6 @@ async function carregarSeries(pagina = 0) {
         const series = data.content ?? data;
         totalPaginas = data.totalPages ?? 1;
         paginaAtual  = data.number    ?? pagina;
-
         grid.innerHTML = '';
         if (!series.length) {
             grid.innerHTML = '<div class="empty"><div class="icon">📺</div><p>Nenhuma série cadastrada.</p></div>';
@@ -69,7 +68,6 @@ function renderCard(s, container) {
     const inicial = (s.titulo || '?')[0].toUpperCase();
     const nota = s.notaMedia != null ? `⭐ ${s.notaMedia.toFixed(1)}` : '';
     const data = s.dataLancamento ? new Date(s.dataLancamento).toLocaleDateString('pt-BR') : '';
-
     card.innerHTML = `
         <div class="card-header">
             ${inicial}
@@ -78,14 +76,14 @@ function renderCard(s, container) {
         <div class="card-body">
             <div class="title" title="${s.titulo}">${s.titulo}</div>
             <div class="meta">
-                ${s.temporadas ? `<span class="tag">📅 ${s.temporadas} temp.</span>` : ''}
-                ${s.episodios  ? `<span class="tag">🎬 ${s.episodios} ep.</span>` : ''}
-                ${data         ? `<span class="tag">📆 ${data}</span>` : ''}
+                ${s.temporadas ? `<span class="tag">🗂 ${s.temporadas} temp.</span>` : ''}
+                ${s.episodios  ? `<span class="tag">🎬 ${s.episodios} ep.</span>`  : ''}
+                ${data         ? `<span class="tag">📅 ${data}</span>`             : ''}
             </div>
             <div class="desc">${s.descricao || 'Sem descrição.'}</div>
             <div class="actions">
                 <button class="btn btn-secondary btn-sm" onclick='abrirEdicao(${JSON.stringify(s)})'>✏️ Editar</button>
-                <button class="btn btn-danger btn-sm" onclick="deletar('${s.id}', this)">🗑 Deletar</button>
+                <button class="btn btn-danger btn-sm"    onclick="deletar('${s.id}', this)">🗑 Deletar</button>
             </div>
         </div>`;
     container.appendChild(card);
@@ -115,20 +113,39 @@ async function buscarPorId() {
     }
 }
 
+async function buscarPorCategoria() {
+    const categoriaId = getVal('input-categoria');
+    if (!categoriaId) { toast('Cole o UUID da categoria.', 'error'); return; }
+    const grid = document.getElementById('categoria-grid');
+    grid.innerHTML = '<div class="loading">Buscando...</div>';
+    try {
+        const res = await fetch(`${BASE_URL}/categoria/${encodeURIComponent(categoriaId)}`, { headers: authHeader() });
+        if (res.status === 404) throw new Error('Categoria não encontrada.');
+        if (!res.ok) throw new Error('Erro na busca por categoria.');
+        const series = await res.json();
+        grid.innerHTML = '';
+        if (!series.length) {
+            grid.innerHTML = '<div class="empty"><div class="icon">🏷️</div><p>Nenhuma série nesta categoria.</p></div>';
+            return;
+        }
+        series.forEach(s => renderCard(s, grid));
+    } catch (e) {
+        grid.innerHTML = `<div class="empty"><div class="icon">⚠️</div><p>${e.message}</p></div>`;
+    }
+}
+
 async function cadastrar() {
     const titulo     = getVal('c-titulo');
     const descricao  = getVal('c-descricao');
     const temporadas = getVal('c-temporadas');
     const episodios  = getVal('c-episodios');
-    if (!titulo || !descricao)        { toast('Título e Descrição são obrigatórios.', 'error'); return; }
-    if (!temporadas || !episodios)    { toast('Temporadas e Episódios são obrigatórios.', 'error'); return; }
-
+    if (!titulo || !descricao)     { toast('Título e Descrição são obrigatórios.', 'error'); return; }
+    if (!temporadas || !episodios) { toast('Temporadas e Episódios são obrigatórios.', 'error'); return; }
     const body = { titulo, descricao, temporadas: parseInt(temporadas), episodios: parseInt(episodios) };
     const data = getVal('c-data');
     const nota = getVal('c-nota');
     if (data) body.dataLancamento = data;
     if (nota) body.notaMedia = parseFloat(nota);
-
     try {
         const res = await fetch(BASE_URL, { method: 'POST', headers: authHeader(), body: JSON.stringify(body) });
         if (res.status === 201) {
@@ -144,12 +161,12 @@ async function cadastrar() {
 function abrirEdicao(s) {
     showSection('atualizar');
     document.getElementById('e-id').value         = s.id;
-    document.getElementById('e-titulo').value     = s.titulo      || '';
-    document.getElementById('e-descricao').value  = s.descricao   || '';
-    document.getElementById('e-temporadas').value = s.temporadas  || '';
-    document.getElementById('e-episodios').value  = s.episodios   || '';
+    document.getElementById('e-titulo').value     = s.titulo         || '';
+    document.getElementById('e-descricao').value  = s.descricao      || '';
+    document.getElementById('e-temporadas').value = s.temporadas     || '';
+    document.getElementById('e-episodios').value  = s.episodios      || '';
     document.getElementById('e-data').value       = s.dataLancamento || '';
-    document.getElementById('e-nota').value       = s.notaMedia   || '';
+    document.getElementById('e-nota').value       = s.notaMedia      || '';
 }
 
 async function atualizar() {
@@ -158,16 +175,14 @@ async function atualizar() {
     const descricao  = getVal('e-descricao');
     const temporadas = getVal('e-temporadas');
     const episodios  = getVal('e-episodios');
-    if (!id)                          { toast('Informe o ID da série.', 'error'); return; }
-    if (!titulo || !descricao)        { toast('Título e Descrição são obrigatórios.', 'error'); return; }
-    if (!temporadas || !episodios)    { toast('Temporadas e Episódios são obrigatórios.', 'error'); return; }
-
+    if (!id)                       { toast('Informe o ID da série.', 'error'); return; }
+    if (!titulo || !descricao)     { toast('Título e Descrição são obrigatórios.', 'error'); return; }
+    if (!temporadas || !episodios) { toast('Temporadas e Episódios são obrigatórios.', 'error'); return; }
     const body = { titulo, descricao, temporadas: parseInt(temporadas), episodios: parseInt(episodios) };
     const data = getVal('e-data');
     const nota = getVal('e-nota');
     if (data) body.dataLancamento = data;
     if (nota) body.notaMedia = parseFloat(nota);
-
     try {
         const res = await fetch(`${BASE_URL}/${id}`, { method: 'PUT', headers: authHeader(), body: JSON.stringify(body) });
         if (res.ok) {

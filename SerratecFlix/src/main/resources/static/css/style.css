@@ -433,6 +433,62 @@ textarea {
     margin-bottom: 1rem;
 }
 
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.card:hover { 
+    transform: translateY(-4px); 
+    border-color: var(--accent); 
+}
+
+.card-header {
+    background: linear-gradient(135deg, #1e1e2e, #2a1a2a);
+    height: 45px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    font-family: var(--fonte-padrao);
+    font-size: 2.5rem;
+    color: rgba(230,57,70,0.3);
+    letter-spacing: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-header::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at top right, rgba(230,57,70,0.1), transparent 60%);
+}
+
+.rating-badge {
+    position: absolute; top: 0.6rem; right: 0.6rem;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+}
+
+.card-body { 
+    padding: 1rem; 
+}
+
+.title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
 .detail-row {
     display: flex; justify-content: space-between;
     padding: 0.5rem 0;

@@ -25,11 +25,10 @@ function showSection(id) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     const sec = document.getElementById(id);
     if (sec) sec.classList.add('active');
-    document.querySelectorAll('.nav-api-btn').forEach(b => b.classList.remove('active'));
-    const ids = ['listar', 'buscar-id', 'buscar-titulo', 'cadastrar', 'atualizar', 'deletar'];
-    const idx = ids.indexOf(id);
-    const btns = document.querySelectorAll('.nav-api-btn');
-    if (btns[idx]) btns[idx].classList.add('active');
+    const ids = ['listar', 'buscar-id', 'buscar-titulo', 'buscar-categoria', 'cadastrar', 'atualizar', 'deletar'];
+    document.querySelectorAll('.nav-api-btn').forEach((b, i) => {
+        b.classList.toggle('active', ids[i] === id);
+    });
 }
 
 let paginaAtual = 0;
@@ -43,25 +42,21 @@ async function carregarFilmes(pagina = 0) {
         const res = await fetch(`${BASE_URL}?page=${pagina}&size=10&orderBy=titulo`, { headers: authHeader() });
         if (!res.ok) throw new Error('Erro ao buscar filmes.');
         const data = await res.json();
-        
         const filmes = data.content ?? data;
         totalPaginas = data.totalPages ?? 1;
-        paginaAtual = data.number ?? pagina;
-
+        paginaAtual  = data.number    ?? pagina;
         grid.innerHTML = '';
         if (!filmes.length) {
             grid.innerHTML = '<div class="empty"><div class="icon">🎬</div><p>Nenhum filme cadastrado ainda.</p></div>';
         } else {
             filmes.forEach(f => renderCard(f, grid));
         }
-
         const info = document.getElementById('page-info');
         if (info) info.textContent = `Página ${paginaAtual + 1} de ${totalPaginas}`;
         const prev = document.getElementById('btn-prev');
         const next = document.getElementById('btn-next');
         if (prev) prev.disabled = paginaAtual === 0;
         if (next) next.disabled = paginaAtual >= totalPaginas - 1;
-
     } catch (e) {
         grid.innerHTML = `<div class="empty"><div class="icon">⚠️</div><p>${e.message}</p></div>`;
     }
@@ -76,11 +71,10 @@ function renderCard(f, container) {
     const card = document.createElement('div');
     card.className = 'card';
     const inicial = (f.titulo || '?')[0].toUpperCase();
-    const nota = f.notaMedia != null ? `⭐ ${f.notaMedia.toFixed(1)}` : '';
+    const nota    = f.notaMedia != null ? `⭐ ${f.notaMedia.toFixed(1)}` : '';
     const duracao = f.duracao ? `${f.duracao} min` : '';
-    const data = f.dataLancamento ? new Date(f.dataLancamento).toLocaleDateString('pt-BR') : '';
+    const data    = f.dataLancamento ? new Date(f.dataLancamento).toLocaleDateString('pt-BR') : '';
     const classif = classificacaoLabel(f.classificacaoIndicativa);
-
     card.innerHTML = `
         <div class="card-header">
             ${inicial}
@@ -90,13 +84,13 @@ function renderCard(f, container) {
             <div class="title" title="${f.titulo}">${f.titulo}</div>
             <div class="meta">
                 ${duracao ? `<span class="tag">⏱ ${duracao}</span>` : ''}
-                ${data    ? `<span class="tag">📅 ${data}</span>` : ''}
+                ${data    ? `<span class="tag">📅 ${data}</span>`   : ''}
                 ${f.classificacaoIndicativa ? `<span class="tag classificacao">${classif}</span>` : ''}
             </div>
             <div class="desc">${f.descricao || 'Sem descrição.'}</div>
             <div class="actions">
                 <button class="btn btn-secondary btn-sm" onclick='abrirEdicao(${JSON.stringify(f)})'>✏️ Editar</button>
-                <button class="btn btn-danger btn-sm" onclick="deletar('${f.id}', this)">🗑 Deletar</button>
+                <button class="btn btn-danger btn-sm"    onclick="deletar('${f.id}', this)">🗑 Deletar</button>
             </div>
         </div>`;
     container.appendChild(card);
@@ -146,21 +140,40 @@ async function buscarPorTitulo() {
     }
 }
 
+async function buscarPorCategoria() {
+    const categoriaId = getVal('input-categoria');
+    if (!categoriaId) { toast('Cole o UUID da categoria.', 'error'); return; }
+    const grid = document.getElementById('categoria-grid');
+    grid.innerHTML = '<div class="loading">Buscando...</div>';
+    try {
+        const res = await fetch(`${BASE_URL}/categoria/${encodeURIComponent(categoriaId)}`, { headers: authHeader() });
+        if (res.status === 404) throw new Error('Categoria não encontrada.');
+        if (!res.ok) throw new Error('Erro na busca por categoria.');
+        const filmes = await res.json();
+        grid.innerHTML = '';
+        if (!filmes.length) {
+            grid.innerHTML = '<div class="empty"><div class="icon">🏷️</div><p>Nenhum filme nesta categoria.</p></div>';
+            return;
+        }
+        filmes.forEach(f => renderCard(f, grid));
+    } catch (e) {
+        grid.innerHTML = `<div class="empty"><div class="icon">⚠️</div><p>${e.message}</p></div>`;
+    }
+}
+
 async function cadastrar() {
-    const titulo = getVal('c-titulo');
+    const titulo    = getVal('c-titulo');
     const descricao = getVal('c-descricao');
     if (!titulo || !descricao) { toast('Título e Descrição são obrigatórios.', 'error'); return; }
-
-    const body = { titulo, descricao };
+    const body    = { titulo, descricao };
     const duracao = getVal('c-duracao');
-    const data = getVal('c-data');
+    const data    = getVal('c-data');
     const classif = getVal('c-classificacao');
-    const nota = getVal('c-nota');
-    if (duracao)  body.duracao = parseInt(duracao);
-    if (data)     body.dataLancamento = data;
-    if (classif)  body.classificacaoIndicativa = classif;
-    if (nota)     body.notaMedia = parseFloat(nota);
-
+    const nota    = getVal('c-nota');
+    if (duracao) body.duracao = parseInt(duracao);
+    if (data)    body.dataLancamento = data;
+    if (classif) body.classificacaoIndicativa = classif;
+    if (nota)    body.notaMedia = parseFloat(nota);
     try {
         const res = await fetch(BASE_URL, { method: 'POST', headers: authHeader(), body: JSON.stringify(body) });
         if (res.status === 201) {
@@ -175,32 +188,30 @@ async function cadastrar() {
 
 function abrirEdicao(f) {
     showSection('atualizar');
-    document.getElementById('e-id').value = f.id;
-    document.getElementById('e-titulo').value = f.titulo || '';
-    document.getElementById('e-descricao').value = f.descricao || '';
-    document.getElementById('e-duracao').value = f.duracao || '';
-    document.getElementById('e-data').value = f.dataLancamento || '';
+    document.getElementById('e-id').value            = f.id;
+    document.getElementById('e-titulo').value        = f.titulo    || '';
+    document.getElementById('e-descricao').value     = f.descricao || '';
+    document.getElementById('e-duracao').value       = f.duracao   || '';
+    document.getElementById('e-data').value          = f.dataLancamento || '';
     document.getElementById('e-classificacao').value = f.classificacaoIndicativa || '';
-    document.getElementById('e-nota').value = f.notaMedia || '';
+    document.getElementById('e-nota').value          = f.notaMedia || '';
 }
 
 async function atualizar() {
-    const id = getVal('e-id');
-    const titulo = getVal('e-titulo');
+    const id        = getVal('e-id');
+    const titulo    = getVal('e-titulo');
     const descricao = getVal('e-descricao');
-    if (!id) { toast('Informe o ID do filme.', 'error'); return; }
+    if (!id)                   { toast('Informe o ID do filme.', 'error'); return; }
     if (!titulo || !descricao) { toast('Título e Descrição são obrigatórios.', 'error'); return; }
-
-    const body = { titulo, descricao };
+    const body    = { titulo, descricao };
     const duracao = getVal('e-duracao');
-    const data = getVal('e-data');
+    const data    = getVal('e-data');
     const classif = getVal('e-classificacao');
-    const nota = getVal('e-nota');
-    if (duracao)  body.duracao = parseInt(duracao);
-    if (data)     body.dataLancamento = data;
-    if (classif)  body.classificacaoIndicativa = classif;
-    if (nota)     body.notaMedia = parseFloat(nota);
-
+    const nota    = getVal('e-nota');
+    if (duracao) body.duracao = parseInt(duracao);
+    if (data)    body.dataLancamento = data;
+    if (classif) body.classificacaoIndicativa = classif;
+    if (nota)    body.notaMedia = parseFloat(nota);
     try {
         const res = await fetch(`${BASE_URL}/${id}`, { method: 'PUT', headers: authHeader(), body: JSON.stringify(body) });
         if (res.ok) {
@@ -221,9 +232,7 @@ async function deletar(id, btn) {
         if (res.status === 204 || res.ok) {
             toast('Filme deletado.');
             btn?.closest('.card')?.remove();
-        } else {
-            toast('Erro ao deletar.', 'error');
-        }
+        } else { toast('Erro ao deletar.', 'error'); }
     } catch (e) { toast('Falha na conexão.', 'error'); }
 }
 
@@ -234,12 +243,9 @@ async function deletarPorInput() {
     document.getElementById('d-input-id').value = '';
 }
 
-function limparForm(prefixo) {
-    const p = prefixo || 'c';
-    [`${p}-titulo`, `${p}-descricao`, `${p}-duracao`, `${p}-data`, `${p}-nota`].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = '';
-    });
+function limparForm(p) {
+    [`${p}-titulo`, `${p}-descricao`, `${p}-duracao`, `${p}-data`, `${p}-nota`]
+        .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
     const cl = document.getElementById(`${p}-classificacao`);
     if (cl) cl.value = '';
 }
