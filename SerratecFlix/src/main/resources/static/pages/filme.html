@@ -32,7 +32,8 @@
         <nav class="nav-api">
             <button class="nav-api-btn active">🎬 Filme</button>
             <button class="nav-api-btn">🔍 ID</button>
-            <button class="nav-api-btn">🧭 Título</button>
+            <button class="nav-api-btn">🔍 Título</button>
+            <button class="nav-api-btn">🔍 Categoria</button>
             <button class="nav-api-btn">＋ Cadastrar</button>
             <button class="nav-api-btn">🔄 Atualizar</button>
             <button class="nav-api-btn">&minus; Deletar</button>
@@ -61,6 +62,14 @@
             <div class="search-bar">
                 <input type="text" id="input-titulo" placeholder="Digite o título do filme..." onkeydown="if(event.key==='Enter') buscarPorTitulo()"/>
                 <button class="btn btn-primary" onclick="buscarPorTitulo()">Buscar</button>
+            </div>
+            <div id="busca-grid" class="grid"></div>
+        </div>
+        <div id="buscar-titulo" class="section">
+            <h2>Buscar Filme por Categoria</h2>
+            <div class="search-bar">
+                <input type="text" id="input-titulo" placeholder="Digite o ID da categoria..." onkeydown="if(event.key==='Enter') buscarPorCategoria()"/>
+                <button class="btn btn-primary" onclick="buscarPorCategoria()">Buscar</button>
             </div>
             <div id="busca-grid" class="grid"></div>
         </div>
